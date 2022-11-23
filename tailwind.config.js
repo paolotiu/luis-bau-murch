@@ -2,8 +2,13 @@
 module.exports = {
   content: ['./src/**/*.{js,jsx,ts,tsx}'],
   theme: {
-    extend: {}
+    extend: {
+      fontFamily: {
+        fredoka: ['fredoka'],
+        openSans: ['open-sans'],
+      },
+    },
   },
   variants: {},
-  plugins: ['@tailwindcss/forms']
-}
+  plugins: ['@tailwindcss/forms'],
+};
