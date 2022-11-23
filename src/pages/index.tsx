@@ -4,7 +4,7 @@ import ImagePanel from "@/components/ImagePanel";
 
 export default function IndexPage() {
   return (
-    <Layout title="Home | Next.js + TypeScript Example">
+    <Layout title="Shop Sign-Up">
       <main className="flex flex-row font-fredoka text-black">
         <ShopForm />
         <ImagePanel />
