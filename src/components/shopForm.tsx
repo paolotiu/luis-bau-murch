@@ -1,88 +1,156 @@
-import React from "react";
-import Image from "next/image";
 import { Uploader } from "uploader";
-import { UploadButton, UploadDropzone } from "react-uploader";
-import star from "../../public/images/star.png";
-import signUpFormBar from "../../public/images/signUpFormBar.png";
+import { UploadDropzone } from "react-uploader";
+import { useFormik } from "formik";
+import { formSchema } from "../utils/validations";
+import { useMutation } from "@tanstack/react-query";
+import toast, { Toaster } from "react-hot-toast";
+
+import axios from "axios";
+import ShopFormUIElements from "./shopFormUIElements";
+import router from "next/router";
 type Props = {};
+
+interface Shop {
+  name: string;
+  email: string;
+  phone: string;
+  description: string;
+}
 
 export default function ShopForm({}: Props) {
   const input: string =
-    "rounded border border-solid border-black p-2 font-openSans text-sm";
+    "rounded border border-solid border-black p-2 font-openSans text-sm text-stone-500";
 
   const uploader = Uploader({
     // Get production API keys from Upload.io
     apiKey: "free",
   });
 
+  const formik = useFormik({
+    initialValues: {
+      name: "",
+      email: "",
+      phone: "",
+      description: "",
+    },
+    validationSchema: formSchema,
+
+    onSubmit: async (values: Shop) => {
+      const isValid = await formSchema.isValid(values);
+
+      if (!isValid) {
+        return toast.error("Please Input Valid Data");
+      }
+
+      signUp(values);
+    },
+  });
+
+  const { mutate: signUp } = useMutation(
+    async (values: Shop) => {
+      let res = await axios.post("/api/shop", {
+        values,
+      });
+      return res.data.data;
+    },
+    {
+      onSuccess: () => {
+        toast.success("Signed up successfully! Redirecting to shop page...");
+        setTimeout(() => {
+          router.push("/shops");
+        }, 3000);
+      },
+      onError: (error: any) => {
+        toast.error(error.response.data.message);
+      },
+    },
+  );
+
   return (
     <div className="relative flex basis-3/5 flex-col border px-56 pt-28">
-      <div className="absolute left-32 top-16 h-16 w-16">
-        <Image src={star} />
-      </div>
+      <Toaster />
+      <ShopFormUIElements />
 
-      <div className="absolute right-32 bottom-40 h-16 w-16">
-        <Image src={star} />
-      </div>
-      <Image src={signUpFormBar} />
-      <h1 className="py-5 text-3xl">Let's set up some info!</h1>
-      <h3 className="font-openSans">
-        These are required for account creation.
-      </h3>
-
-      <form className="flex flex-col">
+      <form onSubmit={formik.handleSubmit} className="flex flex-col">
         <label htmlFor="shopName" className="my-2">
           Shop Name<span className="text-red-600">*</span>
         </label>
+        <p className="text-sm text-red-600">
+          {formik.touched.name && formik.errors.name ? formik.errors.name : ""}
+        </p>
         <input
+          placeholder="Shop name"
           className={input}
           type="text"
-          name="shopName"
-          placeholder="Shop Name"
+          name="name"
+          value={formik.values.name}
+          onChange={formik.handleChange}
+          onBlur={formik.handleBlur}
         />
 
         <label htmlFor="shopEmail" className="my-2">
           Shop Email<span className="text-red-600">*</span>
         </label>
+        <p className="text-sm text-red-600">
+          {formik.touched.email && formik.errors.email
+            ? formik.errors.email
+            : ""}
+        </p>
         <input
+          placeholder="elon.musk@gmail.com"
           className={input}
           type="text"
-          name="shopEmail"
-          placeholder="elon.musk@gmail.com"
+          name="email"
+          value={formik.values.email}
+          onChange={formik.handleChange}
+          onBlur={formik.handleBlur}
         />
 
         <label htmlFor="shopContactNumber" className="my-2">
           Shop Contact Number<span className="text-red-600">*</span>
         </label>
+        <p className="text-sm text-red-600">
+          {formik.touched.phone && formik.errors.phone
+            ? formik.errors.phone
+            : ""}
+        </p>
         <input
+          placeholder="+63 916 906 9069"
           className={input}
           type="text"
-          name="shopContactNumber"
-          placeholder="(+63) 916 906 9069"
+          name="phone"
+          value={formik.values.phone}
+          onChange={formik.handleChange}
+          onBlur={formik.handleBlur}
         />
 
         <label htmlFor="shopAddress" className="my-2">
           Short Description
         </label>
         <textarea
+          placeholder="Write your short description here..."
+          onChange={formik.handleChange}
+          value={formik.values.description}
+          onBlur={formik.handleBlur}
           className={`${input} resize-none`}
           maxLength={150}
-          name="shopAddress"
-          defaultValue={"Write your short description here..."}
+          name="description"
         />
         <label htmlFor="myfile" className="my-5">
           Shop Logo
         </label>
         <UploadDropzone
           uploader={uploader}
-          options={{ multi: true }}
           onUpdate={(files) => console.log(files)}
-          width="300px"
-          height="300px"
+          width="250px"
+          height="250px"
         />
 
         <div className="flex justify-center py-5">
-          <button className="w-28 rounded bg-yellowButton px-5 py-3 text-xl text-black">
+          <button
+            type="submit"
+            className="w-28 rounded bg-yellowButton px-5 py-3 text-xl text-black"
+          >
             Submit
           </button>
         </div>
