@@ -8,7 +8,7 @@ interface Shop {
   name: string;
   email: string;
   phone: string;
-  description: string;
+  description?: string;
 }
 
 export default async function shop(_req: NextApiRequest, res: NextApiResponse) {

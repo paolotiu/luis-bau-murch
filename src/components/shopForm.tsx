@@ -32,8 +32,9 @@ export default function ShopForm() {
       name: "",
       email: "",
       phone: "",
-      description: "",
+      description: " ",
     },
+
     validationSchema: formSchema,
 
     onSubmit: async (values: Shop) => {
@@ -59,7 +60,7 @@ export default function ShopForm() {
         toast.success("Signed up successfully! Redirecting to shop page...");
         setTimeout(() => {
           router.push("/shops");
-        }, 3000);
+        }, 1000);
       },
       onError: (error: any) => {
         toast.error(error.response.data.message);
@@ -156,7 +157,7 @@ export default function ShopForm() {
 
         <div className="flex justify-center py-5">
           <button
-            disabled={isLoading}
+            disabled={!(formik.isValid && formik.dirty) || formik.isSubmitting}
             type="submit"
             className="w-28 rounded bg-yellowButton px-5 py-3 text-xl text-black"
           >

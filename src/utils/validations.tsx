@@ -7,5 +7,5 @@ export const formSchema = Yup.object().shape({
   phone: Yup.string()
     .phone("PH", false, "Valid Philippine phone number must be used")
     .required("Phone number is required"),
-  description: Yup.string().min(1).max(150),
+  description: Yup.string().nullable().notRequired(),
 });
