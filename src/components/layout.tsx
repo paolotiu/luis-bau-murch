@@ -1,5 +1,4 @@
 import Head from "next/head";
-import logo from "../../public/images/Group 10.png";
 type LayoutProps = {
   children: React.ReactNode;
   title?: string;
