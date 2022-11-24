@@ -9,7 +9,6 @@ import axios from "axios";
 import ShopFormUIElements from "./shopFormUIElements";
 import router from "next/router";
 import { useState } from "react";
-type Props = {};
 
 interface Shop {
   name: string;
@@ -18,9 +17,9 @@ interface Shop {
   description?: string;
 }
 
-export default function ShopForm({}: Props) {
+export default function ShopForm() {
   const [textAreaCount, setTextAreaCount] = useState(0);
-  const input: string =
+  const input =
     "rounded border border-solid border-black p-2 font-openSans text-sm text-stone-500";
 
   const uploader = Uploader({
@@ -50,7 +49,7 @@ export default function ShopForm({}: Props) {
 
   const { mutate: signUp, isLoading } = useMutation(
     async (values: Shop) => {
-      let res = await axios.post("/api/shop", {
+      const res = await axios.post("/api/shop", {
         values,
       });
       return res.data.data;
@@ -153,12 +152,7 @@ export default function ShopForm({}: Props) {
         <label htmlFor="myfile" className="my-5">
           Shop Logo
         </label>
-        <UploadDropzone
-          uploader={uploader}
-          onUpdate={(files) => console.log(files)}
-          width="250px"
-          height="250px"
-        />
+        <UploadDropzone uploader={uploader} width="250px" height="250px" />
 
         <div className="flex justify-center py-5">
           <button

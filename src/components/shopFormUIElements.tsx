@@ -3,9 +3,7 @@ import star from "../../public/images/star.png";
 import signUpFormBar from "../../public/images/signUpFormBar.png";
 import Image from "next/image";
 
-type Props = {};
-
-export default function ShopFormUIElements({}: Props) {
+export default function ShopFormUIElements() {
   return (
     <>
       <div className="absolute left-32 top-16 h-16 w-16">

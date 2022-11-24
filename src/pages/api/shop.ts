@@ -29,7 +29,7 @@ async function addShop(_req: NextApiRequest, res: NextApiResponse) {
     const isValid = await formSchema.isValid(body);
 
     if (isValid) {
-      const shop = await prisma.shop.create({
+      await prisma.shop.create({
         data: {
           name: body.name,
           email: body.email,

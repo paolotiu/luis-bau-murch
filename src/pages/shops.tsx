@@ -3,7 +3,6 @@ import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import Link from "next/link";
 import Head from "next/head";
-type Props = {};
 
 interface Shop {
   name: string;
@@ -12,7 +11,7 @@ interface Shop {
   description?: string;
 }
 
-export default function shops({}: Props) {
+export default function shops() {
   const getShops = async () => {
     const response = await axios.get("/api/shop");
     return response.data.data;
