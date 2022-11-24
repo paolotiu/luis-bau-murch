@@ -48,7 +48,7 @@ export default function ShopForm() {
     },
   });
 
-  const { mutate: signUp, isLoading } = useMutation(
+  const { mutate: signUp } = useMutation(
     async (values: Shop) => {
       const res = await axios.post("/api/shop", {
         values,
