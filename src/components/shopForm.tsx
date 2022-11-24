@@ -8,16 +8,18 @@ import toast, { Toaster } from "react-hot-toast";
 import axios from "axios";
 import ShopFormUIElements from "./shopFormUIElements";
 import router from "next/router";
+import { useState } from "react";
 type Props = {};
 
 interface Shop {
   name: string;
   email: string;
   phone: string;
-  description: string;
+  description?: string;
 }
 
 export default function ShopForm({}: Props) {
+  const [textAreaCount, setTextAreaCount] = useState(0);
   const input: string =
     "rounded border border-solid border-black p-2 font-openSans text-sm text-stone-500";
 
@@ -46,7 +48,7 @@ export default function ShopForm({}: Props) {
     },
   });
 
-  const { mutate: signUp } = useMutation(
+  const { mutate: signUp, isLoading } = useMutation(
     async (values: Shop) => {
       let res = await axios.post("/api/shop", {
         values,
@@ -129,13 +131,25 @@ export default function ShopForm({}: Props) {
         </label>
         <textarea
           placeholder="Write your short description here..."
-          onChange={formik.handleChange}
           value={formik.values.description}
           onBlur={formik.handleBlur}
           className={`${input} resize-none`}
           maxLength={150}
           name="description"
+          onChange={(e) => {
+            formik.handleChange(e);
+            setTextAreaCount(e.target.value.length);
+          }}
         />
+
+        <div
+          className={`flex place-content-end font-openSans text-sm ${
+            textAreaCount == 150 ? "text-red-600" : ""
+          }`}
+        >
+          {textAreaCount}/150
+        </div>
+
         <label htmlFor="myfile" className="my-5">
           Shop Logo
         </label>
@@ -148,6 +162,7 @@ export default function ShopForm({}: Props) {
 
         <div className="flex justify-center py-5">
           <button
+            disabled={isLoading}
             type="submit"
             className="w-28 rounded bg-yellowButton px-5 py-3 text-xl text-black"
           >

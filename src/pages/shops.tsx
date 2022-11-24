@@ -1,13 +1,15 @@
 import React from "react";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
+import Link from "next/link";
+import Head from "next/head";
 type Props = {};
 
 interface Shop {
   name: string;
   email: string;
   phone: string;
-  description: string;
+  description?: string;
 }
 
 export default function shops({}: Props) {
@@ -22,6 +24,10 @@ export default function shops({}: Props) {
 
   return (
     <div className="justify-top m-4 flex h-screen flex-col items-center font-fredoka">
+      <Head>
+        <link rel="shortcut icon" href="/images/Group 10.png" />
+        <title>Shops</title>
+      </Head>
       <ul className="">
         {shops?.map((shop: Shop, index: number) => {
           return (
@@ -38,6 +44,14 @@ export default function shops({}: Props) {
           );
         })}
       </ul>
+      <Link href="/" className="m-4">
+        <button
+          type="button"
+          className="w-28 rounded bg-yellowButton px-5 py-3 text-lg text-black "
+        >
+          Go Back!
+        </button>
+      </Link>
     </div>
   );
 }
